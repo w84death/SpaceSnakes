@@ -140,22 +140,26 @@ function World:draw()
     love.graphics.setBlendMode('alpha', 'premultiplied')
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.draw(self.trailCanvas)
+    
+    -- Set additive blending for glowing effects
+    love.graphics.setBlendMode('add', 'alphamultiply')
+    
+    -- Draw snakes with glow
+    for _, snake in ipairs(self.snakes) do
+        snake:draw()
+    end
+    
+    -- Reset blend mode for UI elements
     love.graphics.setBlendMode('alpha')
     
-    -- Draw food
+    -- Draw food and particles
     for _, food in ipairs(self.food) do
         food:draw()
     end
     
-    -- Draw particles
     for _, p in ipairs(self.particles) do
         love.graphics.setColor(1, 1, 1, p.alpha)
         love.graphics.circle('line', p.x, p.y, p.radius)
-    end
-    
-    -- Draw snakes
-    for _, snake in ipairs(self.snakes) do
-        snake:draw()
     end
 end
 

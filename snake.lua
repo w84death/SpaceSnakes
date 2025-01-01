@@ -21,7 +21,7 @@ function Snake:new(x, y)
             baseG * (1 - whiteMix) + whiteMix,
             baseB * (1 - whiteMix) + whiteMix
         },
-        senseRadius = 100,  -- How far the snake can sense food
+        senseRadius = 128,  -- How far the snake can sense food
         maxTurnSpeed = math.random(3, 6)    -- Maximum turning rate
     }
     setmetatable(snake, {__index = self})
@@ -99,13 +99,31 @@ function Snake:updateSpeed()
 end
 
 function Snake:draw()
-    -- Make snake brighter to stand out against trails
+    -- Draw glow layers
+    for layer = 3, 1, -1 do
+        local alpha = 0.2 / layer
+        local size = 4 + (layer * 2)
+        
+        love.graphics.setColor(
+            self.color[1],
+            self.color[2],
+            self.color[3],
+            alpha
+        )
+        
+        for _, segment in ipairs(self.segments) do
+            love.graphics.circle("fill", segment.x, segment.y, size)
+        end
+    end
+    
+    -- Draw solid snake body on top
     love.graphics.setColor(
         math.min(1.2 * self.color[1], 1),
         math.min(1.2 * self.color[2], 1),
-        math.min(1.2 * self.color[3], 1)
+        math.min(1.2 * self.color[3], 1),
+        1
     )
-    for i, segment in ipairs(self.segments) do
+    for _, segment in ipairs(self.segments) do
         love.graphics.circle("fill", segment.x, segment.y, 4)
     end
 end
