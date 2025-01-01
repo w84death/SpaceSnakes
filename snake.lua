@@ -99,7 +99,12 @@ function Snake:updateSpeed()
 end
 
 function Snake:draw()
-    love.graphics.setColor(self.color)
+    -- Make snake brighter to stand out against trails
+    love.graphics.setColor(
+        math.min(1.2 * self.color[1], 1),
+        math.min(1.2 * self.color[2], 1),
+        math.min(1.2 * self.color[3], 1)
+    )
     for i, segment in ipairs(self.segments) do
         love.graphics.circle("fill", segment.x, segment.y, 4)
     end

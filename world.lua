@@ -11,8 +11,14 @@ function World:new(width, height)
         food = {},
         foodSpawnTimer = 0,
         foodSpawnInterval = 1,
-        particles = {}  -- Remove stars table
+        particles = {},
+        trailCanvas = love.graphics.newCanvas(width, height)
     }
+    
+    -- Initialize trail canvas to white
+    love.graphics.setCanvas(world.trailCanvas)
+    love.graphics.clear(0,0,0, 1)
+    love.graphics.setCanvas()
     
     setmetatable(world, {__index = self})
     return world
@@ -71,6 +77,21 @@ function World:handleReproduction()
 end
 
 function World:update(dt)
+    -- Draw snake trails to canvas
+    love.graphics.setCanvas(self.trailCanvas)
+    love.graphics.setBlendMode('alpha', 'premultiplied')
+    
+    for _, snake in ipairs(self.snakes) do
+        -- Draw darker trail with slight transparency
+        love.graphics.setColor(0.05, 0.05, 0.05, .1)
+        -- Draw circle at the last segment position
+        local lastSegment = snake.segments[#snake.segments]
+        love.graphics.circle('fill', lastSegment.x, lastSegment.y, 3)
+    end
+    
+    love.graphics.setCanvas()
+    love.graphics.setBlendMode('alpha')
+    
     -- Update snakes
     for _, snake in ipairs(self.snakes) do
         snake:update(dt, self.width, self.height, self.food)
@@ -112,8 +133,14 @@ function World:update(dt)
 end
 
 function World:draw()
-    -- Set dark background
+    -- Set dark background first
     love.graphics.clear(0.06, 0.06, 0.08)
+    
+    -- Draw trail canvas with alpha blending
+    love.graphics.setBlendMode('alpha', 'premultiplied')
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.draw(self.trailCanvas)
+    love.graphics.setBlendMode('alpha')
     
     -- Draw food
     for _, food in ipairs(self.food) do
