@@ -1,6 +1,10 @@
 local Snake = {}
 
 function Snake:new(x, y)
+    -- Generate vibrant pastel colors by mixing full saturation with white
+    local baseR, baseG, baseB = math.random(), math.random(), math.random()
+    local whiteMix = 0.25  -- Amount of white to mix in
+    
     local snake = {
         x = x,
         y = y,
@@ -10,9 +14,9 @@ function Snake:new(x, y)
         segments = {{x = x, y = y}},
         length = 10,
         color = {
-            math.random(),
-            math.random(),
-            math.random()
+            baseR * (1 - whiteMix) + whiteMix,  -- Mix with white
+            baseG * (1 - whiteMix) + whiteMix,
+            baseB * (1 - whiteMix) + whiteMix
         },
         senseRadius = 100,  -- How far the snake can sense food
         maxTurnSpeed = 3    -- Maximum turning rate

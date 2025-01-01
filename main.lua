@@ -2,8 +2,9 @@ local World = require 'world'
 local world
 
 function love.load()
-    love.window.setMode(800, 600)
-    world = World:new(800, 600)
+    love.window.setFullscreen(true)
+    local width, height = love.window.getDesktopDimensions()
+    world = World:new(width, height)
     
     -- Create initial snakes
     for i = 1, 10 do
@@ -22,5 +23,11 @@ end
 function love.mousepressed(x, y, button)
     if button == 1 then  -- Left click
         world:spawnFoodAt(x, y)
+    end
+end
+
+function love.keypressed(key)
+    if key == 'escape' then
+        love.event.quit()
     end
 end
