@@ -23,7 +23,7 @@ function World:new(width, height)
     
     -- Initialize trail canvas to white
     love.graphics.setCanvas(world.trailCanvas)
-    love.graphics.clear(0, 0.05, 0.1, 1)
+    love.graphics.clear(0, 0.05, 0.2, 1)
     love.graphics.setCanvas()
     
     setmetatable(world, {__index = self})
@@ -108,7 +108,7 @@ function World:update(dt)
     
     for _, snake in ipairs(self.snakes) do
         -- Draw darker trail with slight transparency
-        love.graphics.setColor(0.05, 0.5, 0.75, 0.001)
+        love.graphics.setColor(0.05, 0.25, 0.5, 0.001)
         -- Draw circle at the last segment position
         local lastSegment = snake.segments[#snake.segments]
         love.graphics.circle('fill', lastSegment.x, lastSegment.y, 3)
