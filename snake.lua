@@ -10,19 +10,19 @@ function Snake:new(x, y)
         y = y,
         angle = math.random() * math.pi * 2,
         turnSpeed = math.random() * 2 - 1,
-        baseSpeed = 300,    -- Initial faster speed
-        minSpeed = 60,      -- Minimum speed when grown
-        speed = 300,        -- Current speed
+        baseSpeed = 350,    -- Initial faster speed
+        minSpeed = 50,      -- Minimum speed when grown
+        speed = 350,        -- Current speed
         segments = {{x = x, y = y}},
         length = 10,
-        matureAge = math.random(100, 500),  -- Random maturity threshold
+        matureAge = math.random(40, 250),  -- Random maturity threshold
         color = {
             baseR * (1 - whiteMix) + whiteMix,  -- Mix with white
             baseG * (1 - whiteMix) + whiteMix,
             baseB * (1 - whiteMix) + whiteMix
         },
         senseRadius = 100,  -- How far the snake can sense food
-        maxTurnSpeed = 3    -- Maximum turning rate
+        maxTurnSpeed = math.random(3, 6)    -- Maximum turning rate
     }
     setmetatable(snake, {__index = self})
     return snake
