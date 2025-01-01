@@ -1,6 +1,5 @@
 local Snake = require 'snake'
-local Star = require 'star'
-local Food = require 'food'
+local Food = require 'food'  -- Remove Star require
 
 local World = {}
 
@@ -12,15 +11,9 @@ function World:new(width, height)
         food = {},
         foodSpawnTimer = 0,
         foodSpawnInterval = 1,
-        stars = {},
-        particles = {}
+        particles = {}  -- Remove stars table
     }
     
-    -- Initialize stars
-    for i = 1, 100 do
-        table.insert(world.stars, Star:new(width, height))
-    end
-
     setmetatable(world, {__index = self})
     return world
 end
@@ -56,11 +49,6 @@ function World:createFoodParticle(x, y)
 end
 
 function World:update(dt)
-    -- Update stars
-    for _, star in ipairs(self.stars) do
-        star:update(dt, self.width, self.height)
-    end
-
     -- Update snakes
     for _, snake in ipairs(self.snakes) do
         snake:update(dt, self.width, self.height, self.food)
@@ -99,10 +87,8 @@ function World:update(dt)
 end
 
 function World:draw()
-    -- Draw stars
-    for _, star in ipairs(self.stars) do
-        star:draw()
-    end
+    -- Set dark background
+    love.graphics.clear(0.06, 0.06, 0.08)
     
     -- Draw food
     for _, food in ipairs(self.food) do

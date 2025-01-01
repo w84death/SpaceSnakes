@@ -10,9 +10,9 @@ function Snake:new(x, y)
         y = y,
         angle = math.random() * math.pi * 2,
         turnSpeed = math.random() * 2 - 1,
-        baseSpeed = 150,    -- Initial faster speed
-        minSpeed = 40,      -- Minimum speed when grown
-        speed = 150,        -- Current speed
+        baseSpeed = 250,    -- Initial faster speed
+        minSpeed = 60,      -- Minimum speed when grown
+        speed = 250,        -- Current speed
         segments = {{x = x, y = y}},
         length = 10,
         color = {

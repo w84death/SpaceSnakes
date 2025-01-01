@@ -7,7 +7,7 @@ function love.load()
     world = World:new(width, height)
     
     -- Create initial snakes
-    for i = 1, 10 do
+    for i = 1, 5 do
         world:addSnake()
     end
 end
