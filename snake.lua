@@ -10,11 +10,12 @@ function Snake:new(x, y)
         y = y,
         angle = math.random() * math.pi * 2,
         turnSpeed = math.random() * 2 - 1,
-        baseSpeed = 250,    -- Initial faster speed
+        baseSpeed = 300,    -- Initial faster speed
         minSpeed = 60,      -- Minimum speed when grown
-        speed = 250,        -- Current speed
+        speed = 300,        -- Current speed
         segments = {{x = x, y = y}},
         length = 10,
+        matureAge = math.random(100, 500),  -- Random maturity threshold
         color = {
             baseR * (1 - whiteMix) + whiteMix,  -- Mix with white
             baseG * (1 - whiteMix) + whiteMix,

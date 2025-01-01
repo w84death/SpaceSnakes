@@ -48,6 +48,28 @@ function World:createFoodParticle(x, y)
     })
 end
 
+function World:handleReproduction()
+    for i = #self.snakes, 1, -1 do
+        if self.snakes[i].length > self.snakes[i].matureAge then
+            -- Get position of parent snake before removing it
+            local parentX = self.snakes[i].x
+            local parentY = self.snakes[i].y
+            
+            -- Remove parent snake
+            table.remove(self.snakes, i)
+            
+            -- Spawn two new snakes near parent's location
+            for j = 1, 2 do
+                local offset = 50  -- Spawn offset distance
+                local newX = (parentX + math.random(-offset, offset)) % self.width
+                local newY = (parentY + math.random(-offset, offset)) % self.height
+                local snake = Snake:new(newX, newY)
+                table.insert(self.snakes, snake)
+            end
+        end
+    end
+end
+
 function World:update(dt)
     -- Update snakes
     for _, snake in ipairs(self.snakes) do
@@ -84,6 +106,9 @@ function World:update(dt)
             table.remove(self.particles, i)
         end
     end
+    
+    -- Handle snake reproduction
+    self:handleReproduction()
 end
 
 function World:draw()
