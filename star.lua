@@ -22,7 +22,7 @@ end
 
 function Star:draw()
     local size = self.z * 1.25
-    local brightness = 4 + 96 * (self.z / 2)
+    local brightness = 24 + 64 * (self.z * 0.5)
     love.graphics.setColor(brightness/255, brightness/255, brightness/255)
     love.graphics.circle('fill', self.x, self.y, size)
 end

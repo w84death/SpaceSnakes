@@ -10,7 +10,9 @@ function Snake:new(x, y)
         y = y,
         angle = math.random() * math.pi * 2,
         turnSpeed = math.random() * 2 - 1,
-        speed = 50,
+        baseSpeed = 150,    -- Initial faster speed
+        minSpeed = 40,      -- Minimum speed when grown
+        speed = 150,        -- Current speed
         segments = {{x = x, y = y}},
         length = 10,
         color = {
@@ -86,6 +88,15 @@ function Snake:update(dt, width, height, foodList)
     end
 end
 
+function Snake:updateSpeed()
+    -- Calculate speed based on length
+    -- Speed decreases as length increases, but never below minSpeed
+    self.speed = math.max(
+        self.minSpeed,
+        self.baseSpeed * (20 / math.max(20, self.length))
+    )
+end
+
 function Snake:draw()
     love.graphics.setColor(self.color)
     for i, segment in ipairs(self.segments) do
@@ -98,6 +109,7 @@ function Snake:checkFood(food, radius)
     local dy = self.y - food.y
     if dx * dx + dy * dy < radius * radius then
         self.length = self.length + 5
+        self:updateSpeed()  -- Update speed when growing
         return true
     end
     return false
