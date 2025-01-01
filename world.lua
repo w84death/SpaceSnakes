@@ -12,12 +12,18 @@ function World:new(width, height)
         foodSpawnTimer = 0,
         foodSpawnInterval = 1,
         particles = {},
-        trailCanvas = love.graphics.newCanvas(width, height)
+        trailCanvas = love.graphics.newCanvas(width, height),
+        waveTime = 0,       -- Global wave timer
+        waveSpeed = 0.5,    -- Wave speed
+        waveAmplitude = 15,  -- Wave size
+        fadeTimer = 0,
+        fadeInterval = 1,  -- Fade every 4 seconds
+        fadeAlpha = 0.3    -- Fade intensity
     }
     
     -- Initialize trail canvas to white
     love.graphics.setCanvas(world.trailCanvas)
-    love.graphics.clear(0, 0.08, 0.12, 1)
+    love.graphics.clear(0, 0.05, 0.1, 1)
     love.graphics.setCanvas()
     
     setmetatable(world, {__index = self})
@@ -77,13 +83,32 @@ function World:handleReproduction()
 end
 
 function World:update(dt)
+    -- Update wave time
+    self.waveTime = self.waveTime + dt * self.waveSpeed
+    
+    -- Update food positions based on wave
+    for _, food in ipairs(self.food) do
+        food:updatePosition(self.waveTime, self.waveAmplitude)
+    end
+    
+    -- Update fade timer and apply fade effect
+    self.fadeTimer = self.fadeTimer + dt
+    if self.fadeTimer >= (1/30) then
+        love.graphics.setCanvas(self.trailCanvas)
+        love.graphics.setBlendMode('subtract', 'premultiplied')
+        love.graphics.setColor(0.005, 0.005, 0.005, 1)
+        love.graphics.rectangle('fill', 0, 0, self.width, self.height)
+        love.graphics.setCanvas()
+        self.fadeTimer = 0
+    end
+    
     -- Draw snake trails to canvas
     love.graphics.setCanvas(self.trailCanvas)
     love.graphics.setBlendMode('alpha', 'premultiplied')
     
     for _, snake in ipairs(self.snakes) do
         -- Draw darker trail with slight transparency
-        love.graphics.setColor(0.05, 0.05, 0.075, .01)
+        love.graphics.setColor(0.05, 0.5, 0.75, 0.001)
         -- Draw circle at the last segment position
         local lastSegment = snake.segments[#snake.segments]
         love.graphics.circle('fill', lastSegment.x, lastSegment.y, 3)

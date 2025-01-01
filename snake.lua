@@ -15,7 +15,7 @@ function Snake:new(x, y)
         speed = 350,        -- Current speed
         segments = {{x = x, y = y}},
         length = 10,
-        matureAge = math.random(40, 250),  -- Random maturity threshold
+        matureAge = math.random(100, 500),  -- Random maturity threshold
         color = {
             baseR * (1 - whiteMix) + whiteMix,  -- Mix with white
             baseG * (1 - whiteMix) + whiteMix,
@@ -94,15 +94,15 @@ function Snake:updateSpeed()
     -- Speed decreases as length increases, but never below minSpeed
     self.speed = math.max(
         self.minSpeed,
-        self.baseSpeed * (20 / math.max(20, self.length))
+        self.baseSpeed * (30 / math.max(30, self.length*.5))
     )
 end
 
 function Snake:draw()
     -- Draw glow layers
     for layer = 3, 1, -1 do
-        local alpha = 0.2 / layer
-        local size = 4 + (layer * 2)
+        local alpha = 0.15 / layer
+        local size = 3.5 + (layer * 2.5)
         
         love.graphics.setColor(
             self.color[1],
@@ -124,7 +124,7 @@ function Snake:draw()
         1
     )
     for _, segment in ipairs(self.segments) do
-        love.graphics.circle("fill", segment.x, segment.y, 4)
+        love.graphics.circle("fill", segment.x, segment.y, 2)
     end
 end
 
@@ -132,6 +132,13 @@ function Snake:checkFood(food, radius)
     local dx = self.x - food.x
     local dy = self.y - food.y
     if dx * dx + dy * dy < radius * radius then
+        -- Add more segments when eating
+        for i = 1, 5 do
+            table.insert(self.segments, {
+                x = self.segments[#self.segments].x,
+                y = self.segments[#self.segments].y
+            })
+        end
         self.length = self.length + 5
         self:updateSpeed()  -- Update speed when growing
         return true
