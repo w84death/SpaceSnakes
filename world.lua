@@ -1,27 +1,6 @@
 local Snake = require 'snake'
-
--- Star class definition
-local Star = {}
-Star.__index = Star
-
-function Star:new(width, height)
-    local star = {
-        x = love.math.random(0, width),
-        y = love.math.random(0, height),
-        z = love.math.random(0.1, 2),
-        speed = 10,
-    }
-    return setmetatable(star, Star)
-end
-
-function Star:update(dt, width, height)
-    self.y = self.y + self.speed * self.z * self.z * dt
-    if self.y > height then
-        self.y = 0
-        self.x = love.math.random(0, width)
-        self.z = love.math.random(0.1, 1.5)
-    end
-end
+local Star = require 'star'
+local Food = require 'food'
 
 local World = {}
 
@@ -34,7 +13,7 @@ function World:new(width, height)
         foodSpawnTimer = 0,
         foodSpawnInterval = 1,
         stars = {},
-        particles = {}  -- Add particles table
+        particles = {}
     }
     
     -- Initialize stars
@@ -55,10 +34,7 @@ function World:addSnake()
 end
 
 function World:spawnFoodAt(x, y)
-    table.insert(self.food, {
-        x = x,
-        y = y
-    })
+    table.insert(self.food, Food:new(x, y))
 end
 
 function World:spawnFood()
@@ -125,19 +101,12 @@ end
 function World:draw()
     -- Draw stars
     for _, star in ipairs(self.stars) do
-        local size = star.z * 1.25
-        local brightness = 4 + 96 * (star.z / 2)
-        love.graphics.setColor(brightness/255, brightness/255, brightness/255)
-        love.graphics.circle('fill', star.x, star.y, size)
+        star:draw()
     end
     
-    -- Reset color for other elements
-    love.graphics.setColor(1, 1, 1)
-
     -- Draw food
-    love.graphics.setColor(1, 1, 1)
     for _, food in ipairs(self.food) do
-        love.graphics.circle('fill', food.x, food.y, 2)
+        food:draw()
     end
     
     -- Draw particles
