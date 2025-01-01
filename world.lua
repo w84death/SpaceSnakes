@@ -93,7 +93,7 @@ function World:update(dt)
     
     -- Update fade timer and apply fade effect
     self.fadeTimer = self.fadeTimer + dt
-    if self.fadeTimer >= (1/30) then
+    if self.fadeTimer >= (1/15) then
         love.graphics.setCanvas(self.trailCanvas)
         love.graphics.setBlendMode('subtract', 'premultiplied')
         love.graphics.setColor(0.005, 0.005, 0.005, 1)
