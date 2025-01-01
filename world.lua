@@ -99,7 +99,7 @@ end
 function World:draw()
     -- Draw stars
     for _, star in ipairs(self.stars) do
-        local size = star.z * 2
+        local size = star.z
         local brightness = 12 + 128 * (star.z / 4)
         love.graphics.setColor(brightness/255, brightness/255, brightness/255)
         love.graphics.circle('fill', star.x, star.y, size)

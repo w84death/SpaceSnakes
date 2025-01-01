@@ -85,7 +85,7 @@ end
 function Snake:draw()
     love.graphics.setColor(self.color)
     for i, segment in ipairs(self.segments) do
-        love.graphics.points(segment.x, segment.y)
+        love.graphics.circle("fill", segment.x, segment.y, 4)
     end
 end
 
